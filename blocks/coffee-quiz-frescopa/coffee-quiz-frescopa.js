@@ -64,9 +64,10 @@ export default async function decorate(block) {
   const cfg = readBlockConfig(block);
   const isAemHost = window.location.hostname.includes('author')
     || window.location.hostname.includes('adobeaemcloud');
+  const placeholderHost = (await getHostname())?.replace(/\/$/, '') || '';
   const imageBaseUrl = isAemHost
     ? window.location.origin
-    : ((await getHostname())?.replace(/\/$/, '') || '');
+    : placeholderHost.replace('author', 'publish');
 
   const rawCompletionUrl = (cfg['completion-url'] || '').toString().trim();
   const completionUrl = (rawCompletionUrl.startsWith('/content/') || /^https?:\/\//i.test(rawCompletionUrl))
